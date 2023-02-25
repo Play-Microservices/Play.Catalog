@@ -41,4 +41,22 @@ public class ItemsController : ControllerBase
 
         return CreatedAtAction(nameof(GetById), new { Id = item.Id }, item);
     }
+
+    [HttpPut("{id}")]
+    public IActionResult Put(Guid id, UpdateItemDTO updateItem)
+    {
+        var existingItem = _items.FirstOrDefault(x => x.Id == id);
+        if (existingItem is null) return NotFound();
+        
+        var updatedItem = existingItem with {
+            Name = updateItem.Name,
+            Description = updateItem.Description,
+            Price = updateItem.Price
+        };
+
+        var index = _items.FindIndex(x => x.Id == id);
+        _items[index] = updatedItem;
+
+        return NoContent();
+    }
 }
