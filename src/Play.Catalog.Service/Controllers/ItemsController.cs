@@ -47,7 +47,7 @@ public class ItemsController : ControllerBase
     {
         var existingItem = _items.FirstOrDefault(x => x.Id == id);
         if (existingItem is null) return NotFound();
-        
+
         var updatedItem = existingItem with {
             Name = updateItem.Name,
             Description = updateItem.Description,
@@ -56,6 +56,17 @@ public class ItemsController : ControllerBase
 
         var index = _items.FindIndex(x => x.Id == id);
         _items[index] = updatedItem;
+
+        return NoContent();
+    }
+
+    [HttpDelete("{id}")]
+    public IActionResult Delete(Guid id)
+    {
+        var existingItem = _items.FirstOrDefault(x => x.Id == id);
+        if (existingItem is null) return NotFound();
+
+        _items.Remove(existingItem);
 
         return NoContent();
     }
