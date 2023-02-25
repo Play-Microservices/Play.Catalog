@@ -24,5 +24,21 @@ public class ItemsController : ControllerBase
     public IEnumerable<ItemDTO> Get() => _items;
 
     [HttpGet("{id}")]
-    public ItemDTO GetById(Guid id) => _items.SingleOrDefault(x => x.Id == id);
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ItemDTO))]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public ActionResult GetById(Guid id)
+    {
+        var item = _items.FirstOrDefault(x => x.Id == id);
+
+        return item is null ? NotFound() : Ok(item);
+    }
+
+    [HttpPost]
+    public ActionResult<ItemDTO> Post(CreateItemDTO createItem)
+    {
+        var item = new ItemDTO(Guid.NewGuid(), createItem.Name, createItem.Description, createItem.Price, DateTimeOffset.UtcNow);
+        _items.Add(item);
+
+        return CreatedAtAction(nameof(GetById), new { Id = item.Id }, item);
+    }
 }
