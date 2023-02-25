@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Play.Catalog.Service.DTOs;
-using Play.Catalog.Service.Repositories;
 using Play.Catalog.Service.Extensions;
 using Play.Catalog.Service.Entites;
+using Play.Catalog.Service.Repositories;
 
 namespace Play.Catalog.Service.Controllers;
 
@@ -10,11 +10,13 @@ namespace Play.Catalog.Service.Controllers;
 [Route("[controller]")]
 public class ItemsController : ControllerBase
 {
-    private readonly ItemsRepository _itemsRepository = new();
+    private readonly IItemsRepository _itemsRepository;
     private readonly ILogger<ItemsController> _logger;
 
-    public ItemsController(ILogger<ItemsController> logger)
+    public ItemsController(IItemsRepository itemsRepository,
+        ILogger<ItemsController> logger)
     {
+        _itemsRepository = itemsRepository;
         _logger = logger;
     }
 
