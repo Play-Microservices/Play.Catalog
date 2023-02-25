@@ -47,7 +47,7 @@ public class ItemsController : ControllerBase
     {
         var existingItem = _items.FirstOrDefault(x => x.Id == id);
         if (existingItem is null) return NotFound();
-
+    
         var updatedItem = existingItem with {
             Name = updateItem.Name,
             Description = updateItem.Description,
