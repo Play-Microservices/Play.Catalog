@@ -3,7 +3,7 @@ using Play.Catalog.Service.Entites;
 
 namespace Play.Catalog.Service.Extensions;
 
-public static class Extensions
+public static class MapperExtensions
 {
     public static ItemDTO AsDTO(this Item item)
     {
