@@ -12,6 +12,7 @@ public class ItemsController : ControllerBase
 {
     private readonly IRepository<Item> _itemsRepository;
     private readonly ILogger<ItemsController> _logger;
+    private static int _requestCounter = 0;
 
     public ItemsController(IRepository<Item> itemsRepository,
         ILogger<ItemsController> logger)
@@ -21,11 +22,27 @@ public class ItemsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IEnumerable<ItemDTO>> GetAsync()
+    public async Task<ActionResult<IEnumerable<ItemDTO>>> GetAsync()
     {
+        _requestCounter++;
+        Console.WriteLine($"Request {_requestCounter}: Starting...");
+
+        if (_requestCounter <= 2)
+        {
+            Console.WriteLine($"Request {_requestCounter}: Delaying...");
+            await Task.Delay(TimeSpan.FromSeconds(10));
+        }
+        
+        if (_requestCounter <= 4)
+        {
+            Console.WriteLine($"Request {_requestCounter}: 500 (Internal Server Error)...");
+            return StatusCode(500);
+        }
+
         var items = await _itemsRepository.GetAllAsync();
 
-        return items.Select(item => item.AsDTO());
+            Console.WriteLine($"Request {_requestCounter}: 200 (OK)...");
+        return Ok(items.Select(item => item.AsDTO()));
     }
 
     [HttpGet("{id}")]
