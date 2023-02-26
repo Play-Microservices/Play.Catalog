@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Play.Catalog.Service.DTOs;
 using Play.Catalog.Service.Extensions;
 using Play.Catalog.Service.Entites;
-using Play.Catalog.Service.Repositories;
+using Play.Common.Repositories;
 
 namespace Play.Catalog.Service.Controllers;
 
