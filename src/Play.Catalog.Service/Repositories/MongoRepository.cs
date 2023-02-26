@@ -3,29 +3,28 @@ using Play.Catalog.Service.Entites;
 
 namespace Play.Catalog.Service.Repositories;
 
-public class ItemsRepository : IItemsRepository
+public class MongoRepository<TEntity> : IRepository<TEntity> where TEntity : IEntity
 {
-    private const string _collectionName = "items";
-    private readonly IMongoCollection<Item> _dbCollection;
-    private readonly FilterDefinitionBuilder<Item> _filterBuilder = Builders<Item>.Filter;
+    private readonly IMongoCollection<TEntity> _dbCollection;
+    private readonly FilterDefinitionBuilder<TEntity> _filterBuilder = Builders<TEntity>.Filter;
 
-    public ItemsRepository(IMongoDatabase mongoDatabase)
+    public MongoRepository(IMongoDatabase mongoDatabase, string collectionName)
     {
-        _dbCollection = mongoDatabase.GetCollection<Item>(_collectionName);
+        _dbCollection = mongoDatabase.GetCollection<TEntity>(collectionName);
     }
 
-    public async Task<IReadOnlyCollection<Item>> GetAllAsync()
+    public async Task<IReadOnlyCollection<TEntity>> GetAllAsync()
     {
         return await _dbCollection.Find(_filterBuilder.Empty).ToListAsync();
     }
 
-    public async Task<Item> GetAsync(Guid id)
+    public async Task<TEntity> GetAsync(Guid id)
     {
         var filter = _filterBuilder.Eq(entity => entity.Id, id);
         return await _dbCollection.Find(filter).FirstOrDefaultAsync();
     }
 
-    public async Task CreateAsync(Item entity)
+    public async Task CreateAsync(TEntity entity)
     {
         if (entity is null)
         {
@@ -35,7 +34,7 @@ public class ItemsRepository : IItemsRepository
         await _dbCollection.InsertOneAsync(entity);
     }
 
-    public async Task UpdateAsync(Item entity)
+    public async Task UpdateAsync(TEntity entity)
     {
         if (entity is null)
         {
