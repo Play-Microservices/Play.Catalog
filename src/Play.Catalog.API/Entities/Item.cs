@@ -1,6 +1,6 @@
 using Play.Common.Entites;
 
-namespace Play.Catalog.Service.Entites;
+namespace Play.Catalog.API.Entites;
 
 public class Item : IEntity
 {

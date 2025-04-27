@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Play.Catalog.Service.DTOs;
+namespace Play.Catalog.API.DTOs;
 
 public record ItemDTO(Guid Id, string Name, string? Description, decimal Price, DateTimeOffset CreatedDate);
 

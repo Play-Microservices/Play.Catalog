@@ -1,4 +1,4 @@
-using Play.Catalog.Service.Entites;
+using Play.Catalog.API.Entites;
 using Play.Common.MassTransit;
 using Play.Common.MongoDB;
 
@@ -26,7 +26,6 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-
     app.UseSwagger();
     app.UseSwaggerUI();
 

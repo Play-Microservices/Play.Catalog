@@ -1,32 +1,25 @@
 using Microsoft.AspNetCore.Mvc;
 using MassTransit;
-using Play.Catalog.Service.DTOs;
-using Play.Catalog.Service.Extensions;
-using Play.Catalog.Service.Entites;
+using Play.Catalog.API.DTOs;
+using Play.Catalog.API.Extensions;
+using Play.Catalog.API.Entites;
 using Play.Common.Repositories;
 using Play.Catalog.Contracts;
 
-namespace Play.Catalog.Service.Controllers;
+namespace Play.Catalog.API.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class ItemsController : ControllerBase
+public class ItemsController(IRepository<Item> itemsRepository,
+    IPublishEndpoint publishEndpoint,
+    ILogger<ItemsController> logger) : ControllerBase
 {
-    private readonly IRepository<Item> _itemsRepository;
-    private readonly IPublishEndpoint _publishEndpoint;
-    private readonly ILogger<ItemsController> _logger;
-
-    public ItemsController(IRepository<Item> itemsRepository,
-        IPublishEndpoint publishEndpoint,
-        ILogger<ItemsController> logger)
-    {
-        _itemsRepository = itemsRepository;
-        _publishEndpoint = publishEndpoint;
-        _logger = logger;
-    }
+    private readonly IRepository<Item> _itemsRepository = itemsRepository;
+    private readonly IPublishEndpoint _publishEndpoint = publishEndpoint;
+    private readonly ILogger<ItemsController> _logger = logger;
 
     [HttpGet]
-    public async Task<IEnumerable<ItemDTO>> GetAsync()
+    public async Task<IEnumerable<ItemDTO>> GetAll()
     {
         var items = await _itemsRepository.GetAllAsync();
 
@@ -63,6 +56,7 @@ public class ItemsController : ControllerBase
     [HttpPut("{id}")]
     public async Task<IActionResult> PutAsync(Guid id, UpdateItemDTO updateItem)
     {
+        _logger.LogInformation("Updating item with id {Id}", id);
         var existingItem = await _itemsRepository.GetAsync(id);
         if (existingItem is null) return NotFound();
     

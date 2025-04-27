@@ -1,7 +1,7 @@
-using Play.Catalog.Service.DTOs;
-using Play.Catalog.Service.Entites;
+using Play.Catalog.API.DTOs;
+using Play.Catalog.API.Entites;
 
-namespace Play.Catalog.Service.Extensions;
+namespace Play.Catalog.API.Extensions;
 
 public static class MapperExtensions
 {
